@@ -17,7 +17,7 @@ class Watch:
     # Method to set a value to the data variable watched by this class
     def set(self, data):
         # If set is called and data value has been changed, save the data and run on change callbacks
-        if data != self.__data:
+        if data != self.__data: # Check for data equality, so will not work for object references
             self.__data = data
             # Call all the __on_change_cbs callback functions
             self.__event(self.__on_change_cbs)

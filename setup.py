@@ -17,7 +17,7 @@ setup(name='Jevents',
         'Programming Language :: Python :: 3.7',
 		'Topic :: Utilities'
       ],
-	  keywords='setInterval loop interval',
+	  keywords='data_observer EventEmitters events observers',
       url='http://github.com/jaimeloeuf',
       author='Jaime Loeuf',
       author_email='jaimeloeuf@gmail.com',
