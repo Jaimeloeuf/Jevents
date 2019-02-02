@@ -55,3 +55,9 @@ class Watch:
         # Loop through and run all the callbacks as seperate threads
         for cb in callbacks:
             Thread(target=cb, daemon=True, args=(self.__data,)).start()
+
+    """ Allow user to do w(5) to pass set method the value 5, where w = Watch(1) """
+    __call__ = set
+    """ Allow user to do w += hello, where hello is a function passed to the on_set method """
+    __iadd__ = on_set
+    """ Note that there is no abbrev. for the on_change method call """

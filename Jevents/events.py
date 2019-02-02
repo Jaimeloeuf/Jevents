@@ -1,5 +1,6 @@
-class Event(object):
-
+class EventEmitter(object):
+	"""	Class to emulate the use of EventEmitters in the Node JS runtime env.
+	"""
     def __init__(self):
         self.handlers = []
     
