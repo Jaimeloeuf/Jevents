@@ -12,16 +12,18 @@ if __name__ == "__main__":
     print(sensorData.value)
 
     # Below are 3 different callbacks that should run when the data changes
-    def hi():
+    def hi(data):
         sleep(2.5)
-        print('hello world')
+        print('hello world ', data)
 
-    def chicken():
+	# All callback functions can expect a input parameter of the data watched.
+    def chicken(data):
         sleep(0.2)
-        print('Chicken nuggets')
+        print('Chicken nuggets ', data)
 
-    def on_change_cb():
-        print('The value has been changed')
+	# The input arguemnts is a tuple, so below is another way of accessing the data.
+    def on_change_cb(*data):
+        print('The value has been changed ', data[0])
 
     # Add the callbacks to the object
     sensorData.on_set(hi)

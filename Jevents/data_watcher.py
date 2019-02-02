@@ -3,7 +3,7 @@ from threading import Thread
 
 class Watch:
     """ Watch class to implement a data-observer pattern on the encapsulated data item.
-        All the event handlers / callbacks will be ran when the data is changed or set. """
+        The event-handlers/callbacks will be ran when the data is changed/set. """
 
     # __on_set_cbs callback functions run the moment set method is used to set a value to the variable.
     __on_set_cbs = []
@@ -54,4 +54,4 @@ class Watch:
     def __event(self, callbacks):
         # Loop through and run all the callbacks as seperate threads
         for cb in callbacks:
-            Thread(target=cb, daemon=True).start()
+            Thread(target=cb, daemon=True, args=(self.__data,)).start()
