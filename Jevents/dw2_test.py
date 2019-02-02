@@ -1,5 +1,5 @@
 # Dependencies for the example code.
-from data_watcher import Watch
+from dw2 import Watch
 from event_loop import wait_for_daemons
 from time import sleep
 import threading
@@ -27,11 +27,10 @@ if __name__ == "__main__":
 
     # Add the callbacks to the object
     sensorData.on_set(hi)
-    # Below is an alternative way to pass functions to on_set method using the __iadd__ shorthand
-    sensorData += chicken
+    sensorData.on_set(chicken)
     # sensorData.on_change(on_change_cb)
     # Alternative way using magic methods to set/append an on_change callback function
-    sensorData + on_change_cb
+    sensorData.on_change += on_change_cb
 
     # Add a time delay to simulate real life operations
     sleep(1.4)
