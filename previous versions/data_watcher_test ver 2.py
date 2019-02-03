@@ -1,6 +1,6 @@
 # Dependencies for the example code.
 from data_watcher import Watch
-from event_loop import wait_for_daemons
+from events import wait_for_daemons
 from time import sleep
 import threading
 

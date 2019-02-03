@@ -1,6 +1,9 @@
+# Path hack to allow parent level module imports. This test script must be executed from this dir. level in the shell for hack to work
+import sys, os
+sys.path.insert(0, os.path.abspath('..'))
 # Dependencies for the example code.
-from dw2 import Watch
-from event_loop import wait_for_daemons
+from watch import Watch
+from events import wait_for_daemons
 from time import sleep
 import threading
 
