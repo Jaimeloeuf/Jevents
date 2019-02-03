@@ -6,7 +6,7 @@ def readme():
         return f.read()
 
 setup(name='Jevents',
-      version='1.1.0',
+      version='1.1.1',
       description='Simple to use Utilities package for creating EventEmitters and implementing data observers.',
 	  long_description=readme(),
       classifiers=[
