@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # Alternatively it can also be accessed by calling itself with the help of the __repr__
     print(sensorData)
 
-    # Below are 4 different callbacks that should run when the data changes
+    """ Below are 4 nested function definitions that will be used as event handlers. """
     def hi(data):
         sleep(2.5)
         print('hello world ', data)
@@ -26,11 +26,12 @@ if __name__ == "__main__":
     # The input arguemnts is a tuple, so below is another way of accessing the data.
     def on_change_cb(*data):
         print('The value has been changed ', data[0])
-    
+
     def on_change_cb2(data):
         sleep(4)
         print('On change Callback function 2 ', data)
 
+    """ Below are different ways to add above functions as event handlers """
     # Add the callbacks to the object using the on_set method
     sensorData.on_set(hi)
     # Alternative way using __add__ magic method to set/append an on_set callback function
@@ -39,6 +40,7 @@ if __name__ == "__main__":
     sensorData.on_change += on_change_cb
     sensorData.on_change += on_change_cb2
 
+    """ Change the data the first time """
     # Add a time delay to simulate real life operations
     sleep(1.4)
     # Update the data in the object, this will cause all the callbacks to be called.
@@ -46,6 +48,7 @@ if __name__ == "__main__":
     # Print out the updated value stored in the object.
     print(sensorData)
 
+    """ Change the data the second time """
     # Add a time delay to simulate real life operations
     sleep(1.4)
     # Below shows the alternative way to call the set method instead of the __call__ shorthand
@@ -53,10 +56,26 @@ if __name__ == "__main__":
     # Print out the updated value stored in the object.
     print(sensorData)
 
+    """ Set the data to the same value, so only on_set handlers are ran """
     # Add a time delay to simulate real life operations
     sleep(1.4)
     # Update the data in the object, this will cause all the callbacks to be called.
     sensorData(2)
+    # Print out the updated value stored in the object.
+    print(sensorData)
+
+    """ Below demos the removal of all the event handlers and its effects. """
+    # Add a time delay to simulate real life operations
+    sleep(3)
+    # Remove all the event handlers.
+    # First method to remove event handlers is by removing all handlers with method call clear
+    sensorData.on_set.clear()
+    # Second way is to remove using the method binded to the __sub__ dunder shorthand
+    sensorData.on_change - on_change_cb
+    # Second way is to remove using the method binded to the __isub__ dunder shorthand
+    sensorData.on_change -= on_change_cb2
+    # Update the data in the object. Notice nothing happens even when a new value is being set.
+    sensorData(5)
     # Print out the updated value stored in the object.
     print(sensorData)
 
