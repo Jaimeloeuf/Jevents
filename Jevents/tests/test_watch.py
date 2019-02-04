@@ -77,6 +77,9 @@ if __name__ == "__main__":
     sensorData.on_change - on_change_cb
     # Second way is to remove using the method binded to the __isub__ dunder shorthand
     sensorData.on_change -= on_change_cb2
+    # Below is another way to remove all event handlers for on_set and on_change in one method call
+    # sensorData.clearAllListeners()
+
     # Update the data in the object. Notice nothing happens even when a new value is being set.
     sensorData(5)
     # Print out the updated value stored in the object.

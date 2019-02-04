@@ -5,8 +5,8 @@ class Watch:
     """ Watch class to implement a data-observer pattern on the encapsulated data item.
         The event-handlers/callbacks will be ran when the data is changed/set. """
 
-    def __init__(self, data):
-        """ Pass constructor the data item to be watched """
+    def __init__(self, data=None):
+        """ Pass constructor the data item to be watched. None by default """
         self.__data = data
         # Create 2 Callback objects to store all the callback functions
         self.on_set = Callback()
@@ -29,6 +29,10 @@ class Watch:
         self.__event(self.on_set)
         # Return self reference to allow method call chainings.
         return self
+    
+    def clearAllListeners(self):
+        self.on_set.clear()
+        self.on_change.clear()
 
     # "Hidden" method that is called when the data is changed, to run all the given callbacks in seperate threads
     def __event(self, callbacks):
@@ -106,8 +110,10 @@ class Callback:
     # Allow user to use these dunder methods to do +, -, +=, -= operations on this class of objects
     __add__ = __iadd__ = append
     __sub__ = __isub__ = remove
-
-    # Shorthand to allow user to set value by calling callback(value)
+    # Shorthand to allow user to append callback by calling callback(value)
     __call__ = append
     # Allow user to get the list when called directly, by using the get method
     __repr__ = get
+	
+	# Working on making this into a 'dict' like object to call callbacks specifically.
+	# def __getitem__(self, )
