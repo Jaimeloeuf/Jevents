@@ -80,6 +80,14 @@ if __name__ == "__main__":
     # Below is another way to remove all event handlers for on_set and on_change in one method call
     # sensorData.clearAllListeners()
 
+    # Defining a callback function that does not take in any inputs.
+    def last_cb():
+        # This cb function can still run as it has been wrapped before running to prevent Errors
+        print('Last cb. This does take any input arguements')
+
+    # Add this callback to run on set method call
+    sensorData.on_set += last_cb
+
     # Update the data in the object. Notice nothing happens even when a new value is being set.
     sensorData(5)
     # Print out the updated value stored in the object.

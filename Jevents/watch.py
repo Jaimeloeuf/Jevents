@@ -33,12 +33,38 @@ class Watch:
     def clearAllListeners(self):
         self.on_set.clear()
         self.on_change.clear()
+    
+    # Static Decorator function that wraps original function in try/except block
+    @staticmethod
+    def fn_wrapper(fn):
+        """ Callbacks are not wrapped on saving them into Callback Class objects because
+            when wrapped, their reference changes, and thus making it unable to be removed
+            from the list of callbacks using the reference to the original function.
+            Thus the wrapper should only be applied just before running the functions.
+        """
+        # Define the inner wrapper function
+        def wrapped_fn(*args, **kwargs):
+            try:
+                # Try to call the original callback function with the arguements
+                fn(*args, **kwargs)
+            except TypeError:
+                # If the function does not except the arguements, call without any
+                fn()
+                # Below is alternative fn call with kwargs
+                # fn(**kwargs)
+            except:
+                # If the exception raised is not a TypeError, log it out
+                print('ERR: Unknown exception raised when calling callback function')
+        
+        # Return the wrapped function back
+        return wrapped_fn
 
     # "Hidden" method that is called when the data is changed, to run all the given callbacks in seperate threads
     def __event(self, callbacks):
         # Loop through and run all the callbacks as seperate threads
         for cb in callbacks:
-            Thread(target=cb, daemon=True, args=(self.__data,)).start()
+            # The thread is used to run the wrapped function
+            Thread(target=self.fn_wrapper(cb), daemon=True, args=(self.__data,)).start()
 
     # Method to return the string representation when str(obj) called
     def __str__(self):
@@ -114,6 +140,6 @@ class Callback:
     __call__ = append
     # Allow user to get the list when called directly, by using the get method
     __repr__ = get
-	
-	# Working on making this into a 'dict' like object to call callbacks specifically.
-	# def __getitem__(self, )
+    
+    # Working on making this into a 'dict' like object to call callbacks specifically.
+    # def __getitem__(self, )
