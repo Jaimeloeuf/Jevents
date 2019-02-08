@@ -18,55 +18,23 @@ class Watch:
         return self.__data
 
     # Method to set a value to the data variable watched by this class
-    def set(self, data):
+    def set(self, data, *args, **kwargs):
         # If set is called and data value has been changed, save the data and run on change callbacks
         if data != self.__data:  # Check for data equality, so will not work for object references
             self.__data = data
             # Run all the on_change callback functions
-            self.__event(self.on_change)
+            self.on_change.run(self.__data, args, kwargs)
 
-        # Always run all the on_set callback functions when set method called
-        self.__event(self.on_set)
+        # Always run all the on_set callback functions when set method is called
+        self.on_set.run(self.__data, args, kwargs)
         # Return self reference to allow method call chainings.
         return self
     
-    # Method to remove all the Callbacks associated with the data
+	# Method to remove all the Callbacks associated with the data
     def clearAllListeners(self):
         self.on_set.clear()
         self.on_change.clear()
     
-    # Static Decorator function that wraps original function in try/except block
-    @staticmethod
-    def fn_wrapper(fn):
-        """ Callbacks are not wrapped on saving them into Callback Class objects because
-            when wrapped, their reference changes, and thus making it unable to be removed
-            from the list of callbacks using the reference to the original function.
-            Thus the wrapper should only be applied just before running the functions.
-        """
-        # Define the inner wrapper function
-        def wrapped_fn(*args, **kwargs):
-            try:
-                # Try to call the original callback function with the arguements
-                fn(*args, **kwargs)
-            except TypeError:
-                # If the function does not except the arguements, call without any
-                fn()
-                # Below is alternative fn call with kwargs
-                # fn(**kwargs)
-            except:
-                # If the exception raised is not a TypeError, log it out
-                print('ERR: Unknown exception raised when calling callback function')
-        
-        # Return the wrapped function back
-        return wrapped_fn
-
-    # "Hidden" method that is called when the data is changed, to run all the given callbacks in seperate threads
-    def __event(self, callbacks):
-        # Loop through and run all the callbacks as seperate threads
-        for cb in callbacks:
-            # The thread is used to run the wrapped function
-            Thread(target=self.fn_wrapper(cb), daemon=True, args=(self.__data,)).start()
-
     # Method to return the string representation when str(obj) called
     def __str__(self):
         # 2 different ways to get the string representation.
@@ -102,13 +70,44 @@ class Callback:
     def get(self):
         return self.__cbs
 
+    # Static Decorator function that wraps original function in try/except block
+    @staticmethod
+    def fn_wrapper(fn):
+        """ Callbacks are not wrapped on saving them into Callback Class objects because
+            when wrapped, their reference changes, and thus making it unable to be removed
+            from the list of callbacks using the reference to the original function.
+            Thus the wrapper should only be applied just before running the functions.
+        """
+        # Define the inner wrapper function
+        def wrapped_fn(*args, **kwargs):
+            try:
+                # Try to call the original callback function with the arguements
+                fn(*args, **kwargs)
+            except TypeError:
+                # If the function does not except the arguements, call without any
+                fn()
+                # Below is alternative fn call with kwargs
+                # fn(**kwargs)
+            except:
+                # If the exception raised is not a TypeError, log it out
+                print('ERR: Unknown exception raised when calling callback function')
+        
+        # Return the wrapped function back
+        return wrapped_fn
+
+
+    def run(self, data, *args, **kwargs):
+        # Loop through and run all the callbacks in seperate threads
+        for cb in self.__cbs:
+            # The thread is used to run the wrapped function
+            Thread(target=self.fn_wrapper(cb), daemon=True, args=(data,), kwargs=kwargs).start()
+
+        # Return self reference to allow method call chainings.
+        return self
+
     # Method to append data/callback-functions into the list
     def append(self, cb):
-        if isinstance(cb, tuple):
-            for callback in cb:
-                self.__cbs.append(callback)
-        else:
-            self.__cbs.append(cb)
+        self.__cbs.append(cb)
         # Return self reference to allow method call chainings.
         return self
 
