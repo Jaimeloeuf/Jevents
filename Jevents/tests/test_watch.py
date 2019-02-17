@@ -44,7 +44,7 @@ if __name__ == "__main__":
     sensorData.on_change += on_change_cb2
 
     """ Change the data the first time """
-    # Add a time delay to simulate real life operations
+    # Add a time delay to simulate real life asynchronous operations
     sleep(1.4)
     # Update the data in the object, this will cause all the callbacks to be called.
     sensorData(1)
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     print(sensorData)
 
     """ Change the data the second time """
-    # Add a time delay to simulate real life operations
+    # Add a time delay to simulate real life asynchronous operations
     sleep(1.4)
     # Below shows the alternative way to call the set method instead of the __call__ shorthand
     sensorData.set(2)
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     print(sensorData)
 
     """ Set the data to the same value, so only on_set handlers are ran """
-    # Add a time delay to simulate real life operations
+    # Add a time delay to simulate real life asynchronous operations
     sleep(1.4)
     # Update the data in the object, this will cause all the callbacks to be called.
     sensorData(2)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     print(sensorData)
 
     """ Below demos the removal of all the event handlers and its effects. """
-    # Add a time delay to simulate real life operations
+    # Add a time delay to simulate real life asynchronous operations
     sleep(3)
     # Remove all the event handlers.
     # First method to remove event handlers is by removing all handlers with method call clear
